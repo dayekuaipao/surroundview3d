@@ -23,6 +23,9 @@
 #define CAPTURE_WIDTH 1280
 #define CAPTURE_HEIGHT 720
 #define CAPTURE_NUM 4
+#define CAPTURE_FORMAT V4L2_PIX_FMT_YUYV
+#define CAPTURE_CHANNEL 3
+#define CAPTURE_SPLIT 2
 
 using namespace::std;
 using namespace::cv;
@@ -51,11 +54,14 @@ int main()
 {
 
     unsigned int indexSize[CAPTURE_NUM];
-    Capture captures[CAPTURE_NUM];
+
     uint8_t* frameData[CAPTURE_NUM];
     vector<CameraModel> cameraModels;
+    vector<Capture> captures;
     for(int c=0;c<CAPTURE_NUM;c++)
     {
+        Capture capture(CAPTURE_WIDTH,CAPTURE_HEIGHT,CAPTURE_FORMAT);
+        captures.push_back(capture);
         CameraModel cameraModel(c,Size(CAPTURE_WIDTH,CAPTURE_HEIGHT));
         // vector<Mat> images;
         // for(int i=0;i<20;i++)
@@ -125,11 +131,10 @@ int main()
     {
         Capture& capture = captures[c];
         Model model{380,800,200,300,500,200,startAngles[c],angles[c],nopOfArcs[c],nopOfFusions[c]};
-        capture.capture_type=V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        capture.format=V4L2_PIX_FMT_YUYV;
-        capture.mWidth=CAPTURE_WIDTH;
-        capture.mHeight=CAPTURE_HEIGHT;
-        capture.initCapture(2+2*c,V4L2_PIX_FMT_YUYV);
+        stringstream ss;
+        ss<<"/dev/video"<<2+2*c;
+        capture.initCapture(ss.str().c_str());
+        capture.startCapture();
 
         CameraModel& cameraModel = cameraModels[c];
         
@@ -201,7 +206,7 @@ int main()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[c]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size() * sizeof(unsigned int), p_indexes, GL_STATIC_DRAW);
 
-        frameData[c] = new uint8_t[captures[c].mWidth*captures[c].mHeight*captures[c].mChannels/captures[c].mSplit];
+        frameData[c] = new uint8_t[CAPTURE_WIDTH*CAPTURE_HEIGHT*CAPTURE_CHANNEL/CAPTURE_SPLIT];
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -248,8 +253,8 @@ int main()
         for(int i=0;i<CAPTURE_NUM;i++)
         {
             Capture& capture = captures[i];
-            Frame frame = capture.getLastFrame();
-            memcpy(frameData[i],frame.data,capture.mWidth*capture.mHeight*capture.mChannels/capture.mSplit);
+            Buffer frame = capture.getLastFrame();
+            memcpy(frameData[i],frame.data,CAPTURE_WIDTH*CAPTURE_HEIGHT*CAPTURE_CHANNEL/CAPTURE_SPLIT);
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, yTexture);

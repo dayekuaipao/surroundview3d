@@ -33,10 +33,10 @@ public:
     Mat undistortMapY;
 
     void readRT(string path);
-    void writeRT(string path);
-    void undistort(InputArray src, OutputArray dst);
+    void writeRT(string path) const;
+    void undistort(InputArray src, OutputArray dst) const;
     virtual void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)=0;
     virtual void loadModel(string filename)=0;
-    virtual void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d)=0;
+    virtual void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const=0;
 };
 #endif

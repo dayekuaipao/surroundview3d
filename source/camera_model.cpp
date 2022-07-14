@@ -23,7 +23,7 @@ void CameraModel::readRT(string path)
     fs.release();
 }
 
-void CameraModel::writeRT(string path)
+void CameraModel::writeRT(string path) const
 {
     FileStorage fs(path,FileStorage::WRITE);
     fs<<"rvec"<<rvec;
@@ -31,7 +31,7 @@ void CameraModel::writeRT(string path)
     fs.release();
 }
 
-void CameraModel::undistort(InputArray src, OutputArray dst)
+void CameraModel::undistort(InputArray src, OutputArray dst) const
 {
     
     remap(src, dst, undistortMapX, undistortMapY, INTER_LINEAR);

@@ -8,7 +8,7 @@
 #include <strings.h>
 
 
-void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays imagePoints)
+void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays imagePoints) const
 {
     Mat R;
     cv::Rodrigues(rvec, R);
@@ -90,7 +90,7 @@ void OcamCameraModel::loadModel(string filename)
     ifs_ref.close(); 
 }
 
-void OcamCameraModel::cam2world(Point2d& imagePoint,Point3d& worldPoint)
+void OcamCameraModel::cam2world(const Point2d& imagePoint,Point3d& worldPoint) const
 {
     double invdet  = 1 / (affine(0, 0) - affine(0, 1) * affine(1, 0)); // 1/det(A), where A = [c,d;e,1] as in the Matlab file
 
@@ -115,7 +115,7 @@ void OcamCameraModel::cam2world(Point2d& imagePoint,Point3d& worldPoint)
     worldPoint.z = invnorm*zp;
 }
 
-void OcamCameraModel::world2cam(Point3d& worldPoint,Point2d& imagePoint)
+void OcamCameraModel::world2cam(const Point3d& worldPoint,Point2d& imagePoint) const
 {
     double xc_norm = imageSize.width / 2.0;
     double yc_norm = imageSize.height / 2.0;

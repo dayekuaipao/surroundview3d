@@ -33,13 +33,13 @@ public:
                                   | shx sy  | shx, shy -  shear factors along the x/y axis */
     
     void initUndistortMaps(float sf);
-    void loadModel(string filename);
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
-    void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d);
+    void loadModel(string filename);
+    void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
 
 private:
 
-    void cam2world(Point2d& imagePoint,Point3d& worldPoint);//OpenCV style behavior! Different from origin Matlab style!
-    void world2cam(Point3d& worldPoint,Point2d& imagePoint);//OpenCV style behavior! Different from origin Matlab style!
+    void cam2world(const Point2d& imagePoint,Point3d& worldPoint) const;//OpenCV style behavior! Different from origin Matlab style!
+    void world2cam(const Point3d& worldPoint,Point2d& imagePoint) const;//OpenCV style behavior! Different from origin Matlab style!
 };
 #endif

@@ -2,8 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
-#include "camera_model.h"
-#include "ocam_camera_model.h"
+#include "omni_camera_model.h"
 #include "model.h"
 #include "shader.h"
 #include "capture.h"
@@ -56,13 +55,13 @@ int main()
     unsigned int indexSize[CAPTURE_NUM];
 
     uint8_t* frameData[CAPTURE_NUM];
-    vector<CameraModel> cameraModels;
+    vector<OmniCameraModel> cameraModels;
     vector<Capture> captures;
     for(int c=0;c<CAPTURE_NUM;c++)
     {
         Capture capture(CAPTURE_WIDTH,CAPTURE_HEIGHT,CAPTURE_FORMAT);
         captures.push_back(capture);
-        CameraModel cameraModel(c,Size(CAPTURE_WIDTH,CAPTURE_HEIGHT));
+        OmniCameraModel cameraModel;
         // vector<Mat> images;
         // for(int i=0;i<20;i++)
         // {
@@ -70,7 +69,8 @@ int main()
         //     images.push_back(image);
         // }
         // cameraModel.computeKD(images,cv::Size(11,8));
-        cameraModel.readKD("../resource/parameters/camera_"+to_string(c)+".yaml");
+        string path = "../resource/parameters/camera_"+to_string(c)+".yaml";
+        cameraModel.loadModel(path);
         cameraModels.push_back(cameraModel);
     }
 

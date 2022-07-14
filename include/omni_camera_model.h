@@ -30,10 +30,9 @@ public:
     Mat xi;
     
     void computeKD(InputArrayOfArrays images, Size patternSize);
-    void readKD(string path);
-    void writeKD(string path);
-    void loadModel(string filename);
+    void saveModel(string path) const;
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
-    void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d);
+    void loadModel(string filename);
+    void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
 };
 #endif

@@ -1,30 +1,45 @@
 #include "ocam_camera_model.h"
 #include <opencv4/opencv2/calib3d.hpp>
 #include <opencv4/opencv2/core/matx.hpp>
+#include <opencv4/opencv2/core/types.hpp>
 #include <opencv4/opencv2/highgui.hpp>
 #include <opencv4/opencv2/imgcodecs.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
 #include <strings.h>
 
 
-void OcamCameraModel::project(vector<Point3d>& worldPoints,vector<Point2d>& imagePoints)
+void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays imagePoints)
 {
-    imagePoints.resize(0);
-    for(auto& worldPoint:worldPoints)
-    {
-        Mat worldPointMat(4, 1, CV_64F);
-        worldPointMat.at<double>(0,0) = worldPoint.x;
-        worldPointMat.at<double>(1,0) = worldPoint.y;
-        worldPointMat.at<double>(2,0) = worldPoint.z;
-        worldPointMat.at<double>(3,0) = 1;
-        Mat cameraPointMat = RT*worldPointMat;
-        cameraPointMat /= cameraPointMat.at<double>(3,0);
-        Point3d cameraPoint(cameraPointMat.at<double>(0,0),cameraPointMat.at<double>(1,0),cameraPointMat.at<double>(2,0));
-        Point2d imagePoint;
-        world2cam(cameraPoint,imagePoint);
-        imagePoints.push_back(imagePoint);
-    }
+    Mat R;
+    cv::Rodrigues(rvec, R);
+    Mat RT = Mat::eye(4,4,CV_64F);
+    Mat rROI(RT,Rect(0,0,3,3));
+    R.copyTo(rROI);
+    Mat tROI(RT,Rect(3,0,1,3));
+    tvec.copyTo(tROI);
 
+    Mat _worldPoints = worldPoints.getMat();
+    imagePoints.create(_worldPoints.size(),CV_64FC2);
+    Mat _imagePoints = imagePoints.getMat();
+    
+    for(int i=0;i<_worldPoints.rows;i++)
+    {
+        for(int j=0;j<_worldPoints.cols;i++)
+        {
+            Point3d worldPoint = _worldPoints.at<Point3d>(i,j);
+            Mat worldPointMat(4, 1, CV_64F);
+            worldPointMat.at<double>(0,0) = worldPoint.x;
+            worldPointMat.at<double>(1,0) = worldPoint.y;
+            worldPointMat.at<double>(2,0) = worldPoint.z;
+            worldPointMat.at<double>(3,0) = 1;
+            Mat cameraPointMat = RT*worldPointMat;
+            cameraPointMat /= cameraPointMat.at<double>(3,0);
+            Point3d cameraPoint(cameraPointMat.at<double>(0,0),cameraPointMat.at<double>(1,0),cameraPointMat.at<double>(2,0));
+            Point2d imagePoint;
+            world2cam(cameraPoint,imagePoint);
+            _imagePoints.at<Point2d>(i,j) = imagePoint;
+        }
+    }
 }
 
 void OcamCameraModel::loadModel(string filename)
@@ -163,43 +178,28 @@ void OcamCameraModel::initUndistortMaps(float sf)
     }
 }
 
-void OcamCameraModel::computeRT(vector<Point2d>& imagePoints,vector<Point3d>& worldPoints)
+void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)
 {
     vector<Point3d> cameraPoints;
-    for(auto& imagePoint:imagePoints)
+    Mat _imagePoints = imagePoints.getMat();
+    Mat _worldPoints = worldPoints.getMat();
+    for(int i=0;i<_worldPoints.rows;i++)
     {
-        Point3d cameraPoint;
-        cam2world(imagePoint,cameraPoint);
-        cameraPoints.push_back(cameraPoint);
+        for(int j=0;j<_worldPoints.cols;i++)
+        {
+            Point3d cameraPoint;
+            Point2d imagePoint = _imagePoints.at<Point2d>(i,j);
+            cam2world(imagePoint,cameraPoint);
+            cameraPoints.push_back(cameraPoint);
+        }
     }
     Mat homo = cv::findHomography(worldPoints,cameraPoints);
     Vec3d r1 = homo.col(0);
     Vec3d r2 = homo.col(1);
     Vec3d r3 = r1.cross(r2);
-    Vec3d t = homo.col(2);
-    cout<<r3<<endl; 
-    RT = Matx44d{r1[0],r2[0],r3[0],t[0],
-                r1[1],r2[1],r3[1],t[1],
-                r1[2],r2[2],r3[2],t[2],
-                0,0,0,1
-                };
-}
-
-void OcamCameraModel::undistort(InputArray src, OutputArray dst)
-{
-    remap(src, dst, undistortMapX, undistortMapY, INTER_LINEAR);
-}
-
-void OcamCameraModel::readRT(string path)
-{
-    FileStorage fs(path,FileStorage::READ);
-    fs["RT"]>>RT;
-    fs.release();
-}
-
-void OcamCameraModel::writeRT(string path)
-{
-    FileStorage fs(path,FileStorage::WRITE);
-    fs<<"RT"<<RT;
-    fs.release();
+    Vec3d tvec = homo.col(2);
+    Matx33d R = cv::Matx33d{r1[0],r2[0],r3[0],
+                r1[1],r2[1],r3[1],
+                r1[2],r2[2],r3[2]};
+    cv::Rodrigues(R, rvec);
 }

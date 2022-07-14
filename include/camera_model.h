@@ -25,27 +25,18 @@ using namespace cv;
 class CameraModel
 {
 public:
-    int index;
-    Size imageSize;   /* The image size (width/height) */
     Mat cameraMatrix;                      /* Camera matrix */
-    Mat distCoeffs;             /* Distortion coefficients */
-    Mat xi;
-    
     Mat rvec;                   /* Rotation vector */
     Mat tvec;                   /* Translation vector */
-    Mat map1,map2;
+    Size imageSize;   /* The image size (width/height) */
+    Mat undistortMapX;
+    Mat undistortMapY;
 
-    CameraModel(Size imageSize):index(0),imageSize(imageSize){};
-    CameraModel(int idx,Size imageSize):index(idx),imageSize(imageSize){};
-    
-    void computeKD(InputArrayOfArrays images, Size patternSize);
-    void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
-    void readKD(string path);
     void readRT(string path);
-    void writeKD(string path);
     void writeRT(string path);
-    void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d);
     void undistort(InputArray src, OutputArray dst);
-    
+    virtual void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)=0;
+    virtual void loadModel(string filename)=0;
+    virtual void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d)=0;
 };
 #endif

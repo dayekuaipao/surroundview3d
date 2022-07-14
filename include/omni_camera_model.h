@@ -1,5 +1,5 @@
-#ifndef OCAM_CAMERA_MODEL_H
-#define OCAM_CAMERA_MODEL_H
+#ifndef OMNI_CAMERA_MODEL_H
+#define OMNI_CAMERA_MODEL_H
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -23,23 +23,17 @@
 using namespace std;
 using namespace cv;
 
-class OcamCameraModel:public CameraModel
+class OmniCameraModel:public CameraModel
 {
 public:
-    vector<double>  pol;       /* The polynomial coefficients of radial camera model */
-    vector<double>  invpol;    /* The coefficients of the inverse polynomial */
-    Point2d         center;    /* cx and cy coordinates of the center in pixels */
-    Matx22d         affine;    /* | sx  shy | sx, sy - scale factors along the x/y axis
-                                  | shx sy  | shx, shy -  shear factors along the x/y axis */
+    Mat distCoeffs;             /* Distortion coefficients */
+    Mat xi;
     
-    void initUndistortMaps(float sf);
+    void computeKD(InputArrayOfArrays images, Size patternSize);
+    void readKD(string path);
+    void writeKD(string path);
     void loadModel(string filename);
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d);
-
-private:
-
-    void cam2world(Point2d& imagePoint,Point3d& worldPoint);//OpenCV style behavior! Different from origin Matlab style!
-    void world2cam(Point3d& worldPoint,Point2d& imagePoint);//OpenCV style behavior! Different from origin Matlab style!
 };
 #endif

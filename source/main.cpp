@@ -55,22 +55,22 @@ int main()
     unsigned int indexSize[CAPTURE_NUM];
 
     uint8_t* frameData[CAPTURE_NUM];
-    vector<OmniCameraModel> cameraModels;
+    vector<CameraModel*> cameraModels;
     vector<Capture> captures;
     for(int c=0;c<CAPTURE_NUM;c++)
     {
         Capture capture(CAPTURE_WIDTH,CAPTURE_HEIGHT,CAPTURE_FORMAT);
         captures.push_back(capture);
-        OmniCameraModel cameraModel;
+        CameraModel* cameraModel = new OmniCameraModel();
         // vector<Mat> images;
         // for(int i=0;i<20;i++)
         // {
         //     Mat image = imread("../resource/images/"+to_string(c)+"/image"+to_string(i)+".jpg");
         //     images.push_back(image);
         // }
-        // cameraModel.computeKD(images,cv::Size(11,8));
+        // cameraModel->computeKD(images,cv::Size(11,8));
         string path = "../resource/parameters/camera_"+to_string(c)+".yaml";
-        cameraModel.loadModel(path);
+        cameraModel->loadModel(path);
         cameraModels.push_back(cameraModel);
     }
 
@@ -136,7 +136,7 @@ int main()
         capture.initCapture(ss.str().c_str());
         capture.startCapture();
 
-        CameraModel& cameraModel = cameraModels[c];
+        CameraModel* cameraModel = cameraModels[c];
         
         // Mat worldPoints;
         // string worldPointsString = "WorldPoints"+to_string(c);
@@ -146,8 +146,8 @@ int main()
         // string imagePointsString = "ImagePoints"+to_string(c);
         // parameter[imagePointsString]>>imagePoints;
 
-        //cameraModel.computeRT(imagePoints,worldPoints);
-        cameraModel.readRT("../resource/parameters/camera_"+to_string(c)+".yaml");
+        //cameraModel->computeRT(imagePoints,worldPoints);
+        cameraModel->readRT("../resource/parameters/camera_"+to_string(c)+".yaml");
 
         vector<Point3f> positions = model.getPositions();
         vector<Point2f> texCoords;
@@ -160,12 +160,12 @@ int main()
             positions_.push_back(p);
         }
 
-        cameraModel.project(positions_,texCoords);
+        cameraModel->project(positions_,texCoords);
 
         vector<Point2f> texCoords_;
         for(auto& texCoord:texCoords)
         {
-            Point2f p = Point2f{texCoord.x/cameraModel.imageSize.width,texCoord.y/cameraModel.imageSize.height};
+            Point2f p = Point2f{texCoord.x/cameraModel->imageSize.width,texCoord.y/cameraModel->imageSize.height};
             texCoords_.push_back(p);
         }
 
@@ -280,6 +280,7 @@ int main()
 
     for(int i=0;i<CAPTURE_NUM;i++)
     {
+        delete cameraModels[i];
         delete [] frameData[i];
         captures[i].stopCapture();
     }

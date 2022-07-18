@@ -14,6 +14,7 @@
 #include <opencv4/opencv2/highgui.hpp>
 #include <opencv4/opencv2/imgcodecs.hpp>
 #include <opencv4/opencv2/imgproc.hpp>
+#include <opencv4/opencv2/viz/types.hpp>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -38,5 +39,6 @@ public:
     virtual void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)=0;
     virtual void loadModel(string filename)=0;
     virtual void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const=0;
+    virtual ~CameraModel() = default;
 };
 #endif

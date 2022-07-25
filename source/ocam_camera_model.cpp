@@ -26,7 +26,7 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
     {
         for(int j=0;j<_worldPoints.cols;i++)
         {
-            Point3d worldPoint = _worldPoints.at<Point3f>(i,j);
+            Point3f worldPoint = _worldPoints.at<Point3f>(i,j);
             Mat worldPointMat(4, 1, CV_32F);
             worldPointMat.at<float>(0,0) = worldPoint.x;
             worldPointMat.at<float>(1,0) = worldPoint.y;
@@ -34,10 +34,10 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
             worldPointMat.at<float>(3,0) = 1;
             Mat cameraPointMat = RT*worldPointMat;
             cameraPointMat /= cameraPointMat.at<float>(3,0);
-            Point3d cameraPoint(cameraPointMat.at<float>(0,0),cameraPointMat.at<float>(1,0),cameraPointMat.at<float>(2,0));
-            Point2d imagePoint;
+            Point3f cameraPoint(cameraPointMat.at<float>(0,0),cameraPointMat.at<float>(1,0),cameraPointMat.at<float>(2,0));
+            Point2f imagePoint;
             world2cam(cameraPoint,imagePoint);
-            _imagePoints.at<Point2d>(i,j) = imagePoint;
+            _imagePoints.at<Point2f>(i,j) = imagePoint;
         }
     }
 }
@@ -160,8 +160,8 @@ void OcamCameraModel::initUndistortMaps(float sf)
     double Nxc = height / 2.0;
     double Nyc = width / 2.0;
     double Nz = -width / sf;
-    Point3d worldPoint;
-    Point2d imagePoint;
+    Point3f worldPoint;
+    Point2f imagePoint;
     undistortMapX.create(height, width, CV_32FC1);
     undistortMapY.create(height, width, CV_32FC1);
     for (int i = 0; i < height; i++)
@@ -180,25 +180,25 @@ void OcamCameraModel::initUndistortMaps(float sf)
 
 void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)
 {
-    vector<Point3d> cameraPoints;
+    vector<Point3f> cameraPoints;
     Mat _imagePoints = imagePoints.getMat();
     Mat _worldPoints = worldPoints.getMat();
     for(int i=0;i<_worldPoints.rows;i++)
     {
         for(int j=0;j<_worldPoints.cols;i++)
         {
-            Point3d cameraPoint;
-            Point2d imagePoint = _imagePoints.at<Point2d>(i,j);
+            Point3f cameraPoint;
+            Point2f imagePoint = _imagePoints.at<Point2f>(i,j);
             cam2world(imagePoint,cameraPoint);
             cameraPoints.push_back(cameraPoint);
         }
     }
     Mat homo = cv::findHomography(worldPoints,cameraPoints);
-    Vec3d r1 = homo.col(0);
-    Vec3d r2 = homo.col(1);
-    Vec3d r3 = r1.cross(r2);
-    Vec3d tvec = homo.col(2);
-    Matx33d R = cv::Matx33d{r1[0],r2[0],r3[0],
+    Vec3f r1 = homo.col(0);
+    Vec3f r2 = homo.col(1);
+    Vec3f r3 = r1.cross(r2);
+    Vec3f tvec = homo.col(2);
+    Matx33f R = cv::Matx33f{r1[0],r2[0],r3[0],
                 r1[1],r2[1],r3[1],
                 r1[2],r2[2],r3[2]};
     cv::Rodrigues(R, rvec);

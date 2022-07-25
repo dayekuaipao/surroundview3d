@@ -39,7 +39,7 @@ public:
 
 private:
 
-    void cam2world(const Point2f& imagePoint,Point3f& worldPoint) const;//OpenCV style behavior! Different from origin Matlab style!
-    void world2cam(const Point3f& worldPoint,Point2f& imagePoint) const;//OpenCV style behavior! Different from origin Matlab style!
+    Point3f cam2world(const Point2f& imagePoint) const;//OpenCV style behavior! Different from origin Matlab style!
+    Point2f world2cam(const Point3f& worldPoint) const;//OpenCV style behavior! Different from origin Matlab style!
 };
 #endif

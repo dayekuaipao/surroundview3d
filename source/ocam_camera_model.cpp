@@ -36,7 +36,7 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
             cameraPointMat /= cameraPointMat.at<float>(3,0);
             Point3f cameraPoint(cameraPointMat.at<float>(0,0),cameraPointMat.at<float>(1,0),cameraPointMat.at<float>(2,0));
             Point2f imagePoint;
-            world2cam(cameraPoint,imagePoint);
+            imagePoint = world2cam(cameraPoint);
             _imagePoints.at<Point2f>(i,j) = imagePoint;
         }
     }
@@ -90,8 +90,9 @@ void OcamCameraModel::loadModel(string filename)
     ifs_ref.close(); 
 }
 
-void OcamCameraModel::cam2world(const Point2f& imagePoint,Point3f& worldPoint) const
+Point3f OcamCameraModel::cam2world(const Point2f& imagePoint) const
 {
+    Point3f worldPoint;
     double invdet  = 1 / (affine(0, 0) - affine(0, 1) * affine(1, 0)); // 1/det(A), where A = [c,d;e,1] as in the Matlab file
 
     double xp = invdet*(affine(1, 1)*(imagePoint.y - center.x) - affine(0, 1) * (imagePoint.x - center.y));
@@ -113,10 +114,12 @@ void OcamCameraModel::cam2world(const Point2f& imagePoint,Point3f& worldPoint) c
     worldPoint.x = (float)(invnorm*xp);
     worldPoint.y = (float)(invnorm*yp); 
     worldPoint.z = (float)(invnorm*zp);
+    return worldPoint;
 }
 
-void OcamCameraModel::world2cam(const Point3f& worldPoint,Point2f& imagePoint) const
+Point2f OcamCameraModel::world2cam(const Point3f& worldPoint) const
 {
+    Point2f imagePoint;
     double xc_norm = imageSize.width / 2.0;
     double yc_norm = imageSize.height / 2.0;
     
@@ -150,7 +153,7 @@ void OcamCameraModel::world2cam(const Point3f& worldPoint,Point2f& imagePoint) c
         imagePoint.y = (float)(affine(0, 0) * u + affine(0, 1) * v + center.x);
         imagePoint.x = (float)(affine(1, 0) * u + affine(1, 1) * v + center.y);
     }           
-
+    return imagePoint;
 }
 
 void OcamCameraModel::initUndistortMaps(float sf)
@@ -171,7 +174,7 @@ void OcamCameraModel::initUndistortMaps(float sf)
             worldPoint.x = (i - Nxc);
             worldPoint.y = (j - Nyc);
             worldPoint.z = Nz;
-            world2cam(worldPoint, imagePoint);
+            imagePoint = world2cam(worldPoint);
             undistortMapX.at<float>(i, j) = (float)imagePoint.x;
             undistortMapY.at<float>(i, j) = (float)imagePoint.y;
         }
@@ -189,7 +192,7 @@ void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
         {
             Point3f cameraPoint;
             Point2f imagePoint = _imagePoints.at<Point2f>(i,j);
-            cam2world(imagePoint,cameraPoint);
+            cameraPoint = cam2world(imagePoint);
             cameraPoints.push_back(cameraPoint);
         }
     }

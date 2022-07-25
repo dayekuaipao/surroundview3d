@@ -14,9 +14,9 @@ public:
     Model(){};
     Model(float xBaseRadius,float yBaseRadius, int nopOfRadius,float extendLength, float height,int nopOfExtend,float startAngle,float angle, int nopOfArc, int nopOfFusion=1,float power=3);
     ~Model();
-    vector<Point3f> getPositions(){return positions;};
-    vector<unsigned int> getIndexes(){return indexes;}
-    vector<float> getAlphas(){return alphas;}
+    vector<Point3f>& getPositions(){return positions;};
+    vector<unsigned int>& getIndexes(){return indexes;}
+    vector<float>& getAlphas(){return alphas;}
 
 private:
     void compute();

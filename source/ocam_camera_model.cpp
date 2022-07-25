@@ -12,29 +12,29 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
 {
     Mat R;
     cv::Rodrigues(rvec, R);
-    Mat RT = Mat::eye(4,4,CV_64F);
+    Mat RT = Mat::eye(4,4,CV_32F);
     Mat rROI(RT,Rect(0,0,3,3));
     R.copyTo(rROI);
     Mat tROI(RT,Rect(3,0,1,3));
     tvec.copyTo(tROI);
 
     Mat _worldPoints = worldPoints.getMat();
-    imagePoints.create(_worldPoints.size(),CV_64FC2);
+    imagePoints.create(_worldPoints.size(),CV_32FC2);
     Mat _imagePoints = imagePoints.getMat();
     
     for(int i=0;i<_worldPoints.rows;i++)
     {
         for(int j=0;j<_worldPoints.cols;i++)
         {
-            Point3d worldPoint = _worldPoints.at<Point3d>(i,j);
-            Mat worldPointMat(4, 1, CV_64F);
-            worldPointMat.at<double>(0,0) = worldPoint.x;
-            worldPointMat.at<double>(1,0) = worldPoint.y;
-            worldPointMat.at<double>(2,0) = worldPoint.z;
-            worldPointMat.at<double>(3,0) = 1;
+            Point3d worldPoint = _worldPoints.at<Point3f>(i,j);
+            Mat worldPointMat(4, 1, CV_32F);
+            worldPointMat.at<float>(0,0) = worldPoint.x;
+            worldPointMat.at<float>(1,0) = worldPoint.y;
+            worldPointMat.at<float>(2,0) = worldPoint.z;
+            worldPointMat.at<float>(3,0) = 1;
             Mat cameraPointMat = RT*worldPointMat;
-            cameraPointMat /= cameraPointMat.at<double>(3,0);
-            Point3d cameraPoint(cameraPointMat.at<double>(0,0),cameraPointMat.at<double>(1,0),cameraPointMat.at<double>(2,0));
+            cameraPointMat /= cameraPointMat.at<float>(3,0);
+            Point3d cameraPoint(cameraPointMat.at<float>(0,0),cameraPointMat.at<float>(1,0),cameraPointMat.at<float>(2,0));
             Point2d imagePoint;
             world2cam(cameraPoint,imagePoint);
             _imagePoints.at<Point2d>(i,j) = imagePoint;
@@ -90,7 +90,7 @@ void OcamCameraModel::loadModel(string filename)
     ifs_ref.close(); 
 }
 
-void OcamCameraModel::cam2world(const Point2d& imagePoint,Point3d& worldPoint) const
+void OcamCameraModel::cam2world(const Point2f& imagePoint,Point3f& worldPoint) const
 {
     double invdet  = 1 / (affine(0, 0) - affine(0, 1) * affine(1, 0)); // 1/det(A), where A = [c,d;e,1] as in the Matlab file
 
@@ -110,12 +110,12 @@ void OcamCameraModel::cam2world(const Point2d& imagePoint,Point3d& worldPoint) c
     //normalize to unit norm
     double invnorm = 1 / sqrt(xp*xp + yp*yp + zp*zp);
  
-    worldPoint.x = invnorm*xp;
-    worldPoint.y = invnorm*yp; 
-    worldPoint.z = invnorm*zp;
+    worldPoint.x = (float)(invnorm*xp);
+    worldPoint.y = (float)(invnorm*yp); 
+    worldPoint.z = (float)(invnorm*zp);
 }
 
-void OcamCameraModel::world2cam(const Point3d& worldPoint,Point2d& imagePoint) const
+void OcamCameraModel::world2cam(const Point3f& worldPoint,Point2f& imagePoint) const
 {
     double xc_norm = imageSize.width / 2.0;
     double yc_norm = imageSize.height / 2.0;
@@ -147,8 +147,8 @@ void OcamCameraModel::world2cam(const Point3d& worldPoint,Point2d& imagePoint) c
         double u = r * worldPoint.x / norm;
         double v = r * worldPoint.y / norm;
 
-        imagePoint.y = (float)((affine(0, 0) * u + affine(0, 1) * v + center.x));
-        imagePoint.x = (float)((affine(1, 0) * u + affine(1, 1) * v + center.y));
+        imagePoint.y = (float)(affine(0, 0) * u + affine(0, 1) * v + center.x);
+        imagePoint.x = (float)(affine(1, 0) * u + affine(1, 1) * v + center.y);
     }           
 
 }

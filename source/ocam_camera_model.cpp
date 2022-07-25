@@ -24,7 +24,7 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
     
     for(int i=0;i<_worldPoints.rows;i++)
     {
-        for(int j=0;j<_worldPoints.cols;i++)
+        for(int j=0;j<_worldPoints.cols;j++)
         {
             Point3f worldPoint = _worldPoints.at<Point3f>(i,j);
             Mat worldPointMat(4, 1, CV_32F);

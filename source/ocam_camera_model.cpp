@@ -188,7 +188,7 @@ void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
     Mat _worldPoints = worldPoints.getMat();
     for(int i=0;i<_worldPoints.rows;i++)
     {
-        for(int j=0;j<_worldPoints.cols;i++)
+        for(int j=0;j<_worldPoints.cols;j++)
         {
             Point3f cameraPoint;
             Point2f imagePoint = _imagePoints.at<Point2f>(i,j);

@@ -200,7 +200,7 @@ void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
     Vec3f r1 = homo.col(0);
     Vec3f r2 = homo.col(1);
     Vec3f r3 = r1.cross(r2);
-    tvec = homo.col(2);
+    tvec = (Vec3f)homo.col(2);
     Matx33f R = cv::Matx33f{r1[0],r2[0],r3[0],
                 r1[1],r2[1],r3[1],
                 r1[2],r2[2],r3[2]};

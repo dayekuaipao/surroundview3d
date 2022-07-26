@@ -26,7 +26,6 @@ using namespace cv;
 class CameraModel
 {
 protected:
-    Mat cameraMatrix;                      /* Camera matrix */
     Mat rvec;                   /* Rotation vector */
     Mat tvec;                   /* Translation vector */
     Mat undistortMapX;

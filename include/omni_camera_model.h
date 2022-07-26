@@ -33,6 +33,7 @@ public:
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
     
 private:
+    Mat cameraMatrix;                      /* Camera matrix */
     Mat distCoeffs;             /* Distortion coefficients */
     Mat xi;
 };

@@ -153,14 +153,7 @@ int main()
         vector<Point2f> texCoords;
         vector<unsigned int> indexes = model.getIndexes();
 
-        vector<Point3f> positions_;
-        for(auto& position:positions)
-        {
-            Point3f p = Point3f{position.x,position.y,position.z};
-            positions_.push_back(p);
-        }
-
-        cameraModel->project(positions_,texCoords);
+        cameraModel->project(positions,texCoords);
 
         vector<Point2f> texCoords_;
         for(auto& texCoord:texCoords)

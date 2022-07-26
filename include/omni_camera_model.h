@@ -26,13 +26,14 @@ using namespace cv;
 class OmniCameraModel:public CameraModel
 {
 public:
-    Mat distCoeffs;             /* Distortion coefficients */
-    Mat xi;
-    
     void computeKD(InputArrayOfArrays images, Size patternSize);
     void saveModel(string path) const;
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
     void loadModel(string filename);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
+    
+private:
+    Mat distCoeffs;             /* Distortion coefficients */
+    Mat xi;
 };
 #endif

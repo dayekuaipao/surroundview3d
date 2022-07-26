@@ -25,14 +25,15 @@ using namespace cv;
 
 class CameraModel
 {
-public:
+protected:
     Mat cameraMatrix;                      /* Camera matrix */
     Mat rvec;                   /* Rotation vector */
     Mat tvec;                   /* Translation vector */
-    Size imageSize;   /* The image size (width/height) */
     Mat undistortMapX;
     Mat undistortMapY;
 
+public:
+    Size imageSize;   /* The image size (width/height) */
     void readRT(string path);
     void writeRT(string path) const;
     void undistort(InputArray src, OutputArray dst) const;

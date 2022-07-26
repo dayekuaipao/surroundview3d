@@ -3,7 +3,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "omni_camera_model.h"
-#include "model.h"
+#include "bowl_model.h"
 #include "shader.h"
 #include "capture.h"
 #include "camera.h"
@@ -130,7 +130,7 @@ int main()
     for(int c=0;c<CAPTURE_NUM;c++)
     {
         Capture& capture = captures[c];
-        Model model{380,800,200,300,500,200,startAngles[c],angles[c],nopOfArcs[c],nopOfFusions[c]};
+        BowlModel model{380,800,200,300,500,200,startAngles[c],angles[c],nopOfArcs[c],nopOfFusions[c]};
         stringstream ss;
         ss<<"/dev/video"<<2+2*c;
         capture.initCapture(ss.str().c_str());

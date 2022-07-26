@@ -1,19 +1,9 @@
-#include "model.h"
+#include "bowl_model.h"
 #include <cmath>
 #include <opencv4/opencv2/core/types.hpp>
 #define PI 3.1415926
-Model::Model(float xBaseRadius,float yBaseRadius, int nopOfRadius,float extendLength, float height,int nopOfExtend,float startAngle,float angle, int nopOfArc, int nopOfFusion,float power)
-        :xBaseRadius(xBaseRadius),yBaseRadius(yBaseRadius),nopOfRadius(nopOfRadius),extendLength(extendLength),height(height),nopOfExtend(nopOfExtend),startAngle(startAngle),angle(angle),nopOfArc(nopOfArc),nopOfFusion(nopOfFusion),power(power)
-{
-    compute();
-}
 
-Model::~Model()
-{
-
-}
-
-void Model::compute() 
+void BowlModel::compute() 
 {
     float factor = height/pow(extendLength,power);
     for(int i=0;i<=nopOfArc;i++)

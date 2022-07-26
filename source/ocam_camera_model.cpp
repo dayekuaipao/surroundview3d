@@ -42,7 +42,7 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
     }
 }
 
-void OcamCameraModel::loadModel(string filename)
+void OcamCameraModel::readKD(string filename)
 {
     string line;
     ifstream ifs_ref(filename.c_str());

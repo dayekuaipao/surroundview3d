@@ -33,11 +33,11 @@ protected:
 
 public:
     Size imageSize;   /* The image size (width/height) */
-    void readRT(string path);
-    void writeRT(string path) const;
+    void readRT(string filename);
+    void writeRT(string filename) const;
     void undistort(InputArray src, OutputArray dst) const;
     virtual void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints)=0;
-    virtual void loadModel(string filename)=0;
+    virtual void readKD(string filename)=0;
     virtual void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const=0;
     virtual ~CameraModel() = default;
 };

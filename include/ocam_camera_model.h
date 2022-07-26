@@ -28,7 +28,7 @@ class OcamCameraModel:public CameraModel
 public:    
     void initUndistortMaps(float sf);
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
-    void loadModel(string filename);
+    void readKD(string filename);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
 
 private:

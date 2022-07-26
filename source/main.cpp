@@ -70,7 +70,7 @@ int main()
         // }
         // cameraModel->computeKD(images,cv::Size(11,8));
         string path = "../resource/parameters/camera_"+to_string(c)+".yaml";
-        cameraModel->loadModel(path);
+        cameraModel->readKD(path);
         cameraModels.push_back(cameraModel);
     }
 

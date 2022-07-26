@@ -8,9 +8,9 @@
 #include <opencv4/opencv2/ccalib/omnidir.hpp>
 #include <strings.h>
 
-void CameraModel::readRT(string path)
+void CameraModel::readRT(string filename)
 {
-    FileStorage fs(path,FileStorage::READ);
+    FileStorage fs(filename,FileStorage::READ);
     fs["rvec"]>>rvec;
     fs["tvec"]>>tvec;
     Mat R;
@@ -23,9 +23,9 @@ void CameraModel::readRT(string path)
     fs.release();
 }
 
-void CameraModel::writeRT(string path) const
+void CameraModel::writeRT(string filename) const
 {
-    FileStorage fs(path,FileStorage::WRITE);
+    FileStorage fs(filename,FileStorage::WRITE);
     fs<<"rvec"<<rvec;
     fs<<"tvec"<<tvec;
     fs.release();

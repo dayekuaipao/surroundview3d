@@ -81,9 +81,9 @@ void OmniCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
 }
 
 
-void OmniCameraModel::loadModel(string path)
+void OmniCameraModel::readKD(string filename)
 {
-    FileStorage fs(path,FileStorage::READ);
+    FileStorage fs(filename,FileStorage::READ);
     fs["cameraMatrix"]>>cameraMatrix;
     fs["distCoeffs"]>>distCoeffs;
     fs["xi"]>>xi;
@@ -93,9 +93,9 @@ void OmniCameraModel::loadModel(string path)
     fs.release();
 }
 
-void OmniCameraModel::saveModel(string path) const
+void OmniCameraModel::writeKD(string filename) const
 {
-    FileStorage fs(path,FileStorage::WRITE);
+    FileStorage fs(filename,FileStorage::WRITE);
     fs<<"cameraMatrix"<<cameraMatrix;
     fs<<"distCoeffs"<<distCoeffs;
     fs<<"xi"<<xi;

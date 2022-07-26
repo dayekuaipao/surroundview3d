@@ -27,9 +27,9 @@ class OmniCameraModel:public CameraModel
 {
 public:
     void computeKD(InputArrayOfArrays images, Size patternSize);
-    void saveModel(string path) const;
+    void writeKD(string filename) const;
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
-    void loadModel(string filename);
+    void readKD(string filename);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
     
 private:

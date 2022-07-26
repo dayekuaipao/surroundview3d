@@ -6,7 +6,7 @@
 #include "bowl_model.h"
 #include "shader.h"
 #include "capture.h"
-#include "camera.h"
+#include "glcamera.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <bits/stdint-uintn.h>
@@ -40,7 +40,7 @@ void processInput(GLFWwindow *window);
 float borderColor[] = {1.0f,1.0f,1.0f,0.0f};
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 100.0f));
+glCamera camera(glm::vec3(0.0f, 0.0f, 100.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;

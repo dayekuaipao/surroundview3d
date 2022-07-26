@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef GL_CAMERA_H
+#define GL_CAMERA_H
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -24,7 +24,7 @@ const float ZOOM        =  90.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
-class Camera
+class glCamera
 {
 public:
     // camera Attributes
@@ -40,8 +40,8 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 0.0f, 1.0f), float yaw = YAW, float pitch = PITCH);
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
+    glCamera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 0.0f, 1.0f), float yaw = YAW, float pitch = PITCH);
+    glCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
     glm::mat4 GetViewMatrix();
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);

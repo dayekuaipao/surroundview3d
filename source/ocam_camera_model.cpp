@@ -15,7 +15,12 @@ void OcamCameraModel::project(InputArrayOfArrays worldPoints,OutputArrayOfArrays
     imagePoints.create(worldPoints.size(),CV_32FC2);
     Mat _imagePoints = imagePoints.getMat();
     vector<Point2f> cameraPoints;
-    projectPoints(worldPoints, rvec, tvec, Mat::eye(Size(3,3),CV_32FC1),Mat::zeros(Size(5,1),CV_32FC1), cameraPoints);
+    vector<Point3f> worldPoints_ = worldPoints.getMat();
+    for(auto& worldPoint:worldPoints_)
+    {
+        worldPoint.z = -worldPoint.z;
+    }
+    projectPoints(worldPoints_, rvec, tvec, Mat::eye(Size(3,3),CV_32FC1),Mat::zeros(Size(5,1),CV_32FC1), cameraPoints);
     for(int i=0;i<cameraPoints.size();i++)
     {
             Point2f cameraPoint = cameraPoints[i];
@@ -170,10 +175,9 @@ void OcamCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
 {
     vector<Point2f> cameraPoints;
     Mat _imagePoints = imagePoints.getMat();
-    Mat _worldPoints = worldPoints.getMat();
-    for(int i=0;i<_worldPoints.rows;i++)
+    for(int i=0;i<_imagePoints.rows;i++)
     {
-        for(int j=0;j<_worldPoints.cols;j++)
+        for(int j=0;j<_imagePoints.cols;j++)
         {
             Point3f cameraPoint;
             Point2f imagePoint = _imagePoints.at<Point2f>(i,j);

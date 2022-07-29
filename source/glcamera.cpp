@@ -1,18 +1,18 @@
 #include "glcamera.h"
 // constructor with vectors
-glCamera::glCamera(glm::vec3 position, glm::vec3 up , float yaw , float pitch) : Front(glm::vec3(0.0f, 1.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+glCamera::glCamera(glm::vec3 position, glm::vec3 worldUp , float yaw , float pitch) : MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 {
     Position = position;
-    WorldUp = up;
+    WorldUp = worldUp;
     Yaw = yaw;
     Pitch = pitch;
     updateCameraVectors();
 }
 // constructor with scalar values
-glCamera::glCamera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 1.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+glCamera::glCamera(float posX, float posY, float posZ, float worldUpX, float worldUpY, float worldUpZ, float yaw, float pitch) : MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 {
     Position = glm::vec3(posX, posY, posZ);
-    WorldUp = glm::vec3(upX, upY, upZ);
+    WorldUp = glm::vec3(worldUpX, worldUpY, worldUpZ);
     Yaw = yaw;
     Pitch = pitch;
     updateCameraVectors();
@@ -67,8 +67,8 @@ void glCamera::updateCameraVectors()
 {
     // calculate the new Front vector
     glm::vec3 front;
-    front.x = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.y = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
     front.z = sin(glm::radians(Pitch));
     Front = glm::normalize(front);
     // also re-calculate the Right and Up vector

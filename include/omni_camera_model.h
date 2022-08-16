@@ -31,7 +31,7 @@ public:
     void computeRT(InputArrayOfArrays imagePoints,InputArrayOfArrays worldPoints);
     void readKD(string filename);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
-    
+    void initUndistortMaps();
 private:
     Mat cameraMatrix;                      /* Camera matrix */
     Mat distCoeffs;             /* Distortion coefficients */

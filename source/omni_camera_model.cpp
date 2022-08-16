@@ -88,8 +88,6 @@ void OmniCameraModel::readKD(string filename)
     fs["distCoeffs"]>>distCoeffs;
     fs["xi"]>>xi;
     fs["imageSize"]>>imageSize;
-    Matx33f p = Matx33d{imageSize.width*0.125f,0,imageSize.width*0.5f,0,imageSize.height*0.125f,imageSize.height*0.5f,0,0,1};
-    omnidir::initUndistortRectifyMap(cameraMatrix, distCoeffs, xi, Matx33d::eye(), p, imageSize,CV_16SC2, undistortMapX, undistortMapY, omnidir::RECTIFY_PERSPECTIVE);
     fs.release();
 }
 
@@ -108,4 +106,10 @@ void OmniCameraModel::project(InputArrayOfArrays p3ds,OutputArrayOfArrays p2ds) 
     double _xi = xi.at<double>(0);
     cout<<_xi<<endl;
     omnidir::projectPoints(p3ds, p2ds, rvec, tvec, cameraMatrix, _xi, distCoeffs);
+}
+
+void OmniCameraModel::initUndistortMaps()
+{
+    Matx33f p = Matx33d{imageSize.width*0.125f,0,imageSize.width*0.5f,0,imageSize.height*0.125f,imageSize.height*0.5f,0,0,1};
+    omnidir::initUndistortRectifyMap(cameraMatrix, distCoeffs, xi, Matx33d::eye(), p, imageSize,CV_16SC2, undistortMapX, undistortMapY, omnidir::RECTIFY_PERSPECTIVE);
 }

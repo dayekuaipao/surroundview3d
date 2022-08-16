@@ -55,13 +55,13 @@ int main()
     unsigned int indexSize[CAPTURE_NUM];
 
     uint8_t* frameData[CAPTURE_NUM];
-    vector<CameraModel*> cameraModels;
+    vector<OmniCameraModel*> cameraModels;
     vector<Capture> captures;
     for(int c=0;c<CAPTURE_NUM;c++)
     {
         Capture capture(CAPTURE_WIDTH,CAPTURE_HEIGHT,CAPTURE_FORMAT);
         captures.push_back(capture);
-        CameraModel* cameraModel = new OmniCameraModel();
+        OmniCameraModel* cameraModel = new OmniCameraModel();
         // vector<Mat> images;
         // for(int i=0;i<20;i++)
         // {
@@ -136,7 +136,7 @@ int main()
         capture.initCapture(ss.str().c_str());
         capture.startCapture();
 
-        CameraModel* cameraModel = cameraModels[c];
+        OmniCameraModel* cameraModel = cameraModels[c];
         
         // Mat worldPoints;
         // string worldPointsString = "WorldPoints"+to_string(c);

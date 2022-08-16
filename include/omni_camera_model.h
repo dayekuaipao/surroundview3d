@@ -18,12 +18,11 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "camera_model.h"
 
 using namespace std;
 using namespace cv;
 
-class OmniCameraModel:public CameraModel
+class OmniCameraModel
 {
 public:
     void computeKD(InputArrayOfArrays images, Size patternSize);

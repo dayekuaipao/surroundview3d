@@ -7,11 +7,11 @@
 #include <vector>
 #include <memory>
 #include <opencv4/opencv2/core.hpp>
-#include "model.h"
+#include "object_model.h"
 using namespace::cv;
 using namespace::std;
 
-class BowlModel:public Model {
+class BowlModel:public ObjectModel {
 public:
     BowlModel(float xBaseRadius,float yBaseRadius, int nopOfRadius,
         float extendLength, float height,int nopOfExtend,

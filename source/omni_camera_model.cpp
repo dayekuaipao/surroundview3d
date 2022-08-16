@@ -113,3 +113,32 @@ void OmniCameraModel::initUndistortMaps()
     Matx33f p = Matx33d{imageSize.width*0.125f,0,imageSize.width*0.5f,0,imageSize.height*0.125f,imageSize.height*0.5f,0,0,1};
     omnidir::initUndistortRectifyMap(cameraMatrix, distCoeffs, xi, Matx33d::eye(), p, imageSize,CV_16SC2, undistortMapX, undistortMapY, omnidir::RECTIFY_PERSPECTIVE);
 }
+
+void OmniCameraModel::readRT(string filename)
+{
+    FileStorage fs(filename,FileStorage::READ);
+    fs["rvec"]>>rvec;
+    fs["tvec"]>>tvec;
+    Mat R;
+    Rodrigues(rvec, R);
+    Mat cameraRotationVector;
+    Rodrigues(R.t(), cameraRotationVector);
+    Mat cameraTranslationVector = -R.t() * tvec;
+    cout << "Camera translation  "<<endl <<  cameraTranslationVector << endl;
+    cout << "Camera rotation  " <<endl<<  cameraRotationVector << endl;\
+    fs.release();
+}
+
+void OmniCameraModel::writeRT(string filename) const
+{
+    FileStorage fs(filename,FileStorage::WRITE);
+    fs<<"rvec"<<rvec;
+    fs<<"tvec"<<tvec;
+    fs.release();
+}
+
+void OmniCameraModel::undistort(InputArray src, OutputArray dst) const
+{
+    
+    remap(src, dst, undistortMapX, undistortMapY, INTER_LINEAR);
+}

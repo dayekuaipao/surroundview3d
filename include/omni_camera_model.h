@@ -32,9 +32,17 @@ public:
     void readKD(string filename);
     void project(InputArrayOfArrays p3d,OutputArrayOfArrays p2d) const;
     void initUndistortMaps();
+    void readRT(string filename);
+    void writeRT(string filename) const;
+    void undistort(InputArray src, OutputArray dst) const;
+    Size imageSize;   /* The image size (width/height) */
 private:
-    Mat cameraMatrix;                      /* Camera matrix */
+    Mat cameraMatrix;           /* Camera matrix */
     Mat distCoeffs;             /* Distortion coefficients */
     Mat xi;
+    Mat rvec;                   /* Rotation vector */
+    Mat tvec;                   /* Translation vector */
+    Mat undistortMapX;
+    Mat undistortMapY;
 };
 #endif

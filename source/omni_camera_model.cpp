@@ -53,8 +53,6 @@ void OmniCameraModel::computeKD(InputArrayOfArrays images, Size patternSize)
         TermCriteria criteria(3, 200, 1e-8);
         Mat idx;
         double rms = omnidir::calibrate(object_points, image_points, imageSize, cameraMatrix,xi,distCoeffs,_rvecs,_tvecs,flags, criteria,idx);
-        Matx33f p = Matx33d{imageSize.width*0.125f,0,imageSize.width*0.5f,0,imageSize.height*0.125f,imageSize.height*0.5f,0,0,1};
-        omnidir::initUndistortRectifyMap(cameraMatrix, distCoeffs, xi, Matx33d::eye(), p, imageSize,CV_16SC2, undistortMapX, undistortMapY, omnidir::RECTIFY_PERSPECTIVE);
         cout<<"rms "<<rms<<endl;
         cout<<"camera K  "<<endl<<cameraMatrix<<endl;
         cout<<"camera D  "<<endl<<distCoeffs<<endl;
@@ -76,8 +74,8 @@ void OmniCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
     Mat cameraRotationVector;
     Rodrigues(R.t(), cameraRotationVector);
     Mat cameraTranslationVector = -R.t() * tvec;
-    cout << "Camera translation  "<<endl <<  cameraTranslationVector << endl;
-    cout << "Camera rotation  " <<endl<<  cameraRotationVector << endl;
+    cout<<"Camera translation  "<<endl<<cameraTranslationVector<<endl;
+    cout<<"Camera rotation  "<<endl<<cameraRotationVector<<endl;
 }
 
 
@@ -124,8 +122,8 @@ void OmniCameraModel::readRT(string filename)
     Mat cameraRotationVector;
     Rodrigues(R.t(), cameraRotationVector);
     Mat cameraTranslationVector = -R.t() * tvec;
-    cout << "Camera translation  "<<endl <<  cameraTranslationVector << endl;
-    cout << "Camera rotation  " <<endl<<  cameraRotationVector << endl;\
+    cout<<"Camera translation  "<<endl<<cameraTranslationVector<<endl;
+    cout<<"Camera rotation  "<<endl<<cameraRotationVector<<endl;
     fs.release();
 }
 

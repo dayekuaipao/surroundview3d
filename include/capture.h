@@ -24,7 +24,7 @@ public:
     int initCapture(const char* deviceName);
     int startCapture();
     int stopCapture();
-    const Buffer& getLastFrame();
+    const Buffer& getLastFrame() const;
 
 private:
     unsigned int mFormat;

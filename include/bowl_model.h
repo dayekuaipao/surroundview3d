@@ -21,13 +21,10 @@ public:
     extendLength(extendLength),height(height),nopOfExtend(nopOfExtend),
     startAngle(startAngle),angle(angle),nopOfArc(nopOfArc),
     nopOfFusion(nopOfFusion),power(power){compute();}
-    vector<float>& getAlphas(){return alphas;}
-    ~BowlModel()=default;
 
 private:
     float xBaseRadius,yBaseRadius,startAngle,angle,extendLength,height,power;
     int nopOfRadius,nopOfExtend,nopOfArc,nopOfFusion;
-    vector<float> alphas;
     void compute();
 };
 

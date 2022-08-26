@@ -70,7 +70,7 @@ int Capture::stopCapture()
     return 0;
 }
 
-const Buffer& Capture::getLastFrame()
+const Buffer& Capture::getLastFrame() const
 {
     struct v4l2_buffer buf = {0};
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;

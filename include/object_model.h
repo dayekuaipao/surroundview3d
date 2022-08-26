@@ -7,12 +7,13 @@ using namespace::std;
 
 class ObjectModel {
 public:
-    vector<Point3f>& getPositions(){return positions;};
-    vector<unsigned int>& getIndexes(){return indexes;}
-    virtual ~ObjectModel()=default;
+    const vector<Point3f>& getPositions()const {return positions;};
+    const vector<unsigned int>& getIndexes()const {return indexes;}
+    const vector<float>& getAlphas()const {return alphas;}
 protected:
     vector<Point3f> positions;
     vector<unsigned int> indexes; 
+    vector<float> alphas;
 private:
     virtual void compute()=0;
 

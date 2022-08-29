@@ -34,6 +34,7 @@ public:
     void readRT(string filename);
     void writeRT(string filename) const;
     void undistort(InputArray src, OutputArray dst) const;
+    void printRT() const;
     Size imageSize;   /* The image size (width/height) */
 private:
     Mat cameraMatrix;           /* Camera matrix */

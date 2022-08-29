@@ -69,13 +69,6 @@ void OmniCameraModel::computeRT(InputArrayOfArrays imagePoints,InputArrayOfArray
     Mat undistortedPoints;
     omnidir::undistortPoints(imagePoints,undistortedPoints,cameraMatrix,distCoeffs,xi,Matx33f::eye());
     solvePnP(worldPoints,undistortedPoints,Matx33f::eye(),Matx41f::zeros(),rvec,tvec);
-    Mat R;
-    Rodrigues(rvec, R);
-    Mat cameraRotationVector;
-    Rodrigues(R.t(), cameraRotationVector);
-    Mat cameraTranslationVector = -R.t() * tvec;
-    cout<<"Camera translation  "<<endl<<cameraTranslationVector<<endl;
-    cout<<"Camera rotation  "<<endl<<cameraRotationVector<<endl;
 }
 
 
@@ -139,4 +132,15 @@ void OmniCameraModel::undistort(InputArray src, OutputArray dst) const
 {
     
     remap(src, dst, undistortMapX, undistortMapY, INTER_LINEAR);
+}
+
+void OmniCameraModel::printRT() const
+{
+    Mat R;
+    Rodrigues(rvec, R);
+    Mat cameraRotationVector;
+    Rodrigues(R.t(), cameraRotationVector);
+    Mat cameraTranslationVector = -R.t() * tvec;
+    cout<<"Camera translation  "<<endl<<cameraTranslationVector<<endl;
+    cout<<"Camera rotation  "<<endl<<cameraRotationVector<<endl;
 }

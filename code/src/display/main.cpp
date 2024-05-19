@@ -85,10 +85,10 @@ int main()
     glGenBuffers(NUM_CAMERA, VBOs);
     glGenBuffers(NUM_CAMERA, EBOs);
 
-    float startAngles[NUM_CAMERA] = {-80,0,80,100,180,260};
-    float angles[NUM_CAMERA] = {160,100,100,160,100,100};
-    int nopOfArcs[NUM_CAMERA] = {160,100,100,160,100,100};
-    int nopOfFusions[NUM_CAMERA] = {80,50,50,80,50,50};
+    float startAngles[NUM_CAMERA] = {-17.5,7,84,162,187,264};
+    float angles[NUM_CAMERA] = {35,87,87,35,87,87};
+    int nopOfArcs[NUM_CAMERA] = {35,87,87,35,87,87};
+    int nopOfFusions[NUM_CAMERA] = {10,10,10,10,10,10};
 
     vector<CameraDrawer*> drawers;
     for(int c=0;c<NUM_CAMERA;c++)

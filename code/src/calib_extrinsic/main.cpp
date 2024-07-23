@@ -59,8 +59,8 @@ struct ProjectionError {
         T rotationVector[3]; 
         T rotation[9];
         for(int j=0;j<3;j++){
-            rotationVector[j]=camera[i*NUM_CAMERA+j];
-            translation[j]=camera[i*NUM_CAMERA+j+3];
+            rotationVector[j]=camera[i*6+j];
+            translation[j]=camera[i*6+j+3];
         }
         AngleAxisToRotationMatrix(rotationVector,rotation);
         for(int j=0;j<NUM_POINT;j++){
